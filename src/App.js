@@ -13,19 +13,21 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch('http://quotes.rest/qod.json')
+    this.fetchQuote();
+  }
+
+  fetchQuote = () => {
+    fetch('https://talaikis.com/api/quotes/random/')
       .then(response => response.json())
       .then(data => {
-        const { quote, author } = data.contents.quotes[0];
-        // let apiQuote = quote;
-        // this.setState({ quote: quote });
+        const { quote, author } = data;
         this.setState({
           quote,
           author,
           loading: false
         });
       });
-  }
+  };
 
   render() {
     if (this.state.loading) {
@@ -37,8 +39,10 @@ class App extends Component {
         <QuoteBoxChild>
           <p id="text">{this.state.quote}</p>
           <p id="author">{this.state.author}</p>
-          <button id="new-quote">New Quote</button>
-          <button id="tweet-quote">Tweet Quote</button>
+          <Button id="new-quote" onClick={this.fetchQuote}>
+            New Quote
+          </Button>
+          <Button id="tweet-quote">Tweet Quote</Button>
         </QuoteBoxChild>
       </QuoteBoxWrapper>
     );
@@ -56,6 +60,24 @@ const QuoteBoxWrapper = styled.div`
 const QuoteBoxChild = styled.div`
   font-size: 2em;
   padding: 1em;
+`;
+
+const Button = styled.button`
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 14px;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  background: #3ecf8e;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  margin-right: 15px;
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.15s ease;
 `;
 
 export default App;
